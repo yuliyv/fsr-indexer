@@ -8,8 +8,7 @@ const _ = require('highland'),
   {storageService, repos: {pgTracksRepo, clients: {logClient}}} = bottle.container;
 
 _(pgTracksRepo.getTrackStream())
-  .slice(0, 10)
-  .batch(2)
+  .batch(20)
   .map((batch) => {
     return _(storageService.storeBatch(batch));
   })
