@@ -5,10 +5,14 @@ require('dotenv').config();
 const _ = require('highland'),
   {generateBottle} = require('./bottle'),
   bottle = generateBottle(),
-  {storageService} = bottle.container;
+  {storageService, repos: {pgTracksRepo, clients: {logClient}}} = bottle.container;
 
-storageService
-  .storeSingle(5285)
-  .then(data => {
-    process.exit(0);
-  });
+_(pgTracksRepo.getTrackStream())
+  .slice(0, 10)
+  .batch(2)
+  .map((batch) => {
+    return _(storageService.storeBatch(batch));
+  })
+  .mergeWithLimit(1)
+  .each((resp) => logClient.info('Indexed Batch', { ids: resp }))
+  .done(() => process.exit(0));

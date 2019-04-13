@@ -3,6 +3,7 @@
 const Bottle = require('bottlejs'),
   
   clients = [
+    require('./clients/log'),
     require('./clients/swiftype'),
     require('./clients/pg')
   ],
@@ -13,6 +14,7 @@ const Bottle = require('bottlejs'),
   ],
   
   services = [
+    require('./services/extract'),
     require('./services/storage')
   ];
 

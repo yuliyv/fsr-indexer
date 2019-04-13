@@ -10,7 +10,7 @@ module.exports.build = function (container) {
       return await baseTable.where({id}).first();
     },
     getTrackStream: function () {
-      return baseTable.stream();
+      return baseTable.orderBy('id', 'asc').stream();
     }
   };
 };

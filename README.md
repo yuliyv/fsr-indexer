@@ -1,4 +1,4 @@
-# fsr-indexer
+# 🦔 fsr-indexer
 
 Testing out the [Swiftype App Search](https://swiftype.com/app-search) product by building out a CLI indexer for some existing postgres data from [freesound radio](https://fsr.wonderful.guru).
 
