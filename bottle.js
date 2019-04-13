@@ -10,24 +10,33 @@ const Bottle = require('bottlejs'),
   repos = [
     require('./repos/elastic/tracks'),
     require('./repos/pg/tracks')
+  ],
+  
+  services = [
+    require('./services/storage')
   ];
 
 function generateBottle() {
   const bottle = new Bottle();
 
+  /**
+   * 
+   * @param {string[]} path 
+   * @param {NodeModule[]} modules 
+   */
   function generateNestedFactory(path, modules) {
     const prefix = path.join('.');
   
-    modules.map(function (module) {
-      const {NAME, build} = module;
+    modules.map(function (obj) {
+      const {NAME, build} = obj;
   
-      /* @todo Nedd to come back to this for top level factory which has no prefix (so avoid the extraneous period here) */
-      bottle.factory(`${prefix}.${NAME}`, build);
+      bottle.factory(`${prefix}${path.length > 0 ? '.' : ''}${NAME}`, build);
     })
   }
 
   generateNestedFactory(['repos', 'clients'], clients);
   generateNestedFactory(['repos'], repos);
+  generateNestedFactory([], services);
   
   return bottle;
 }

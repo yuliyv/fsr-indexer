@@ -5,11 +5,10 @@ require('dotenv').config();
 const _ = require('highland'),
   {generateBottle} = require('./bottle'),
   bottle = generateBottle(),
-  {repos} = bottle.container;
+  {storageService} = bottle.container;
 
-_(repos.pgTracksRepo.getTrackStream())
-  .slice(0, 1)
-  .each(_.log)
-  .done(() => {
+storageService
+  .storeSingle(5285)
+  .then(data => {
     process.exit(0);
-  })
+  });
